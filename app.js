@@ -1,18 +1,23 @@
 const express = require('express');
 const logger = require('morgan');
 const path = require('path');
+const mongoose = require('mongoose');
+
+// mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/gesta-collecta', 
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 const app = express();
 
+// Routes
+const users = require('./routes/users');
+
 // Middleware
 app.use(logger('dev'));
+app.use(express.json());
 
 // Routes
-app.get('/', function(req, res) {
-    res.status(200).json({
-        message: 'You requested the index page'
-    });
-});
+app.use('/users', users);
 
 app.use(express.static('public'));
 app.get('/freedrawing', function(req, res) {

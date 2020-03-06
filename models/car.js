@@ -5,10 +5,10 @@ const carSchema = new Schema({
     make: String,
     model: String,
     year: Number,
-    seller: [{
+    seller: {
         type: Schema.Types.ObjectId,
         ref: 'user'
-    }],
+    },
 });
 
 const Car = mongoose.model('car', carSchema);

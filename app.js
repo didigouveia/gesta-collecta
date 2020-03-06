@@ -2,15 +2,18 @@ const express = require('express');
 const logger = require('morgan');
 const path = require('path');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 // mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/gesta-collecta', 
     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 const app = express();
+app.use(helmet());
 
 // Routes
 const users = require('./routes/users');
+const cars = require('./routes/cars');
 
 // Middleware
 app.use(logger('dev'));
@@ -18,11 +21,12 @@ app.use(express.json());
 
 // Routes
 app.use('/users', users);
+app.use('/cars', cars);
 
-app.use(express.static('public'));
-app.get('/freedrawing', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public/freedrawing.html'));
-});
+// app.use(express.static('public'));
+// app.get('/freedrawing', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'public/freedrawing.html'));
+// });
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {

@@ -12,6 +12,8 @@
   "author": "Dilara Gouveia",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@hapi/joi-date": "^2.0.1",
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "helmet": "^3.21.3",

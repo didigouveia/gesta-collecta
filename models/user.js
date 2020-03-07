@@ -8,7 +8,7 @@ const userSchema = new Schema({
     cars: [{
         type: Schema.Types.ObjectId,
         ref: 'car'
-    }],
+    }]
 });
 
 const User = mongoose.model('user', userSchema);

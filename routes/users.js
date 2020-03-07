@@ -16,7 +16,7 @@ router.route('/:userId')
         validateBody(schemas.userSchema)],
         UsersController.replaceUser)
     .patch([validateParam(schemas.idSchema, 'userId'),
-    validateBody(schemas.userOptionalSchema)],
+        validateBody(schemas.userOptionalSchema)],
         UsersController.updateUser);
 // .delete();
 

@@ -14,6 +14,7 @@ app.use(helmet());
 // Routes
 const users = require('./routes/users');
 const cars = require('./routes/cars');
+const gestures = require('./routes/gestures');
 
 // Middleware
 app.use(logger('dev'));
@@ -22,6 +23,7 @@ app.use(express.json());
 // Routes
 app.use('/users', users);
 app.use('/cars', cars);
+app.use('/gestures', gestures);
 
 // app.use(express.static('public'));
 // app.get('/freedrawing', function(req, res) {

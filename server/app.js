@@ -11,24 +11,12 @@ mongoose.connect('mongodb://localhost/gesta-collecta',
 const app = express();
 app.use(helmet());
 
-// Routes
-const users = require('./routes/users');
-const cars = require('./routes/cars');
-const gestures = require('./routes/gestures');
-
 // Middleware
 app.use(logger('dev'));
 app.use(express.json());
 
 // Routes
-app.use('/users', users);
-app.use('/cars', cars);
-app.use('/gestures', gestures);
-
-// app.use(express.static('public'));
-// app.get('/freedrawing', function(req, res) {
-//     res.sendFile(path.join(__dirname, 'public/freedrawing.html'));
-// });
+app.use('/gestures', require('./routes/gestures'));
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
@@ -54,5 +42,5 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const port = app.get('port')  || 3000;
+const port = process.env.PORT  || 5000;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));

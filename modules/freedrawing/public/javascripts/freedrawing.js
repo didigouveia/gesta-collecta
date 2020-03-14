@@ -1,5 +1,16 @@
 
-(function () {
+(function () { 
+    
+    // TODO: cleanup and better structure code
+    // TODO: check CSS size on smaller screens
+
+    // how to prevent Android browser to resize window when soft keyboard is on - Stackoverflow
+    var meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width,height=' + window.innerHeight + ', initial-scale=1.0';
+    document.getElementsByTagName('head')[0].appendChild(meta);
+    /* ------------------------------------------------------------------------------------------------------------------------ */
+
     // canvas settings
     let border = 10;
     let borderOffset = 2 * border;
@@ -11,7 +22,8 @@
     const canvasDiv = document.getElementById('canvasDiv');
     canvasDiv.style.border = `${border}px solid ${borderColor}`;
     const canvas = this.__canvas = new fabric.Canvas('canvas', { isDrawingMode: true });
-    // canvas.freeDrawingCursor = 'pointer';    
+    // canvas.freeDrawingCursor = 'pointer';
+    const alertBox = document.getElementById('alertBox');
 
     let strokes;
     resizeCanvas();
@@ -28,7 +40,6 @@
 
     let mouseDown = false;
     const menuBtnOverlay = document.getElementById('btnOverlay');
-    const alertBox = document.getElementById('alertBox');
     let stroke;
     canvas.on('mouse:down', (options) => {
         stroke = [];
@@ -58,7 +69,7 @@
 
     canvas.on('path:created', () => {
         strokes.push(stroke);
-        // TODO: alert stroke created
+        alertBox.innerHTML = `Stroke #${strokes.length} created`;
     });
 
     // menu buttons controls
@@ -71,36 +82,39 @@
     let menuOpen = false;
     menuBtn.addEventListener('click', () => {
         if (!menuOpen) {
+            window.removeEventListener('resize', resizeCanvas);
             menuBtn.classList.add('open');
             menuOpen = true;
             menuOverlay.classList.remove('invisible');
 
             gestureName.onkeyup = (e) => {
-                if(e.keyCode == 13){
+                if (e.keyCode == 13) {
                     saveBtn.click();
                 }
             };
 
+            // exits menu
             saveBtn.addEventListener('click', () => {
-                console.log('SAVE CLICKED');
-                
                 if (strokes.length && gestureName.value) {
                     saveGesture(gestureName.value, 0).catch((error) => {
                         console.error(error);
                         saveFailed();
-                    });                   
+                    });
 
                     menuOpen = false;
-                    menuBtn.classList.remove('open');                    
+                    menuBtn.classList.remove('open');
                     menuOverlay.classList.add('invisible');
 
                     gestureName.value = "";
-                    clearCanvas();
+                    window.addEventListener('resize', resizeCanvas);
+                    resizeCanvas();
                 }
             });
 
+            // exits menu
             clearBtn.addEventListener('click', () => {
-                clearCanvas();
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
                 menuBtn.classList.remove('open');
                 menuOpen = false;
                 menuOverlay.classList.add('invisible');
@@ -108,6 +122,7 @@
             });
 
         } else {
+            window.addEventListener('resize', resizeCanvas);
             menuBtn.classList.remove('open');
             menuOpen = false;
             menuOverlay.classList.add('invisible');
@@ -130,13 +145,15 @@
         canvas.freeDrawingBrush.color = brushColor;
         canvas.freeDrawingBrush.width = brushWidth;
         strokes = [];
+        alertBox.innerHTML = "Draw something!";
     }
 
-    // saves gesture to database, returns true if successful
+    localhost = location.hostname;
+    // saves gesture to database
     async function saveGesture(name, subject) {
         newGesture = new Gesture(name, subject, strokes, getDeviceInfo());
 
-        response = await fetch('http://localhost:5050/gestures', {
+        response = await fetch(`http://${localhost}:5050/gestures`, {
             method: 'POST',
             body: JSON.stringify(newGesture),
             headers: {
@@ -147,21 +164,17 @@
             saveFailed();
         });
 
-        apiRes = await response;                       
-        if(400 <= apiRes.status && apiRes.status < 600){ 
-            apiResJson = await apiRes.json();         
-            console.log('SAVE FAILED');  
+        apiRes = await response;
+        if (400 <= apiRes.status && apiRes.status < 600) {
+            apiResJson = await apiRes.json();
             console.error('API RESPONSE', apiResJson.details[0].message);
-            // TODO: alert saving error
             saveFailed();
-        } else{            
-            console.log('SAVE SUCCESSFUL');
-            // TODO: alert saving successful
+        } else {
             saveSuccessful();
-        } 
+        }
     }
 
-    function getDeviceInfo(){
+    function getDeviceInfo() {
         device = new Device(canvas.getHeight(), canvas.getWidth());
 
         modalityElem = document.getElementById('modality');
@@ -171,12 +184,12 @@
         return device;
     }
 
-    function saveFailed(){
-
+    function saveFailed() {
+        alertBox.innerHTML = "Gesture saving failed..";
     }
 
-    function saveSuccessful(){
-
+    function saveSuccessful() {
+        alertBox.innerHTML = "Gesture saved successfully!";
     }
 
 })();

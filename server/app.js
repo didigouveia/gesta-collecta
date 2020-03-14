@@ -1,23 +1,24 @@
 const express = require('express');
 const logger = require('morgan');
-const path = require('path');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/gesta-collecta', 
-    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+mongoose.connect('mongodb://localhost/gesta-collecta',
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .catch(function (reason) {
         console.log('Unable to connect to the mongodb instance. Error: ', reason);
     });
 
 
 const app = express();
-app.use(helmet());
 
 // Middleware
+app.use(helmet());
 app.use(logger('dev'));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(cors());
 
 // Routes
 app.use('/gestures', require('./routes/gestures'));
@@ -32,7 +33,7 @@ app.use((req, res, next) => {
 // Error handler function
 app.use((err, req, res, next) => {
     const error = app.get('env') === 'development' ? err : {};
-    const status = err.status || 500; 
+    const status = err.status || 500;
 
     // Respond to client
     res.status(status).json({
@@ -42,9 +43,9 @@ app.use((err, req, res, next) => {
     });
     // Respond to ourselves
     console.error(err);
-    
+
 });
 
 // Start the server
-const port = process.env.PORT  || 5000;
+const port = process.env.PORT || 5050;
 app.listen(port, () => console.log(`gesta-collecta: server listening on port ${port}`));

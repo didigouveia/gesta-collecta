@@ -9,7 +9,7 @@
     "server-dev": "nodemon server/app.js",
     "freedrawing": "npm run dev --prefix modules/freedrawing",
     "mongo": "C:\\\"Program Files\"\\MongoDB\\Server\\4.2\\bin\\mongod.exe",
-    "dev": "concurrently \"npm run mongo\" \"npm run server-dev\" \"npm run freedrawing\""    
+    "dev": "concurrently \"npm run mongo\" \"npm run server-dev\" \"npm run freedrawing\""
   },
   "author": "Dilara Gouveia",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "@hapi/joi": "^17.1.0",
     "@hapi/joi-date": "^2.0.1",
     "concurrently": "^5.1.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "helmet": "^3.21.3",

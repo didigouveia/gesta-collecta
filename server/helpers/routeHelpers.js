@@ -52,19 +52,19 @@ module.exports = {
                         t: Joi.date().timestamp(),
                         strokeId: Joi.number().required()
             }))),
-            device: {
+            device: Joi.object().keys({
                 os_browser_info: Joi.string().required(),
                 resolution_height: Joi.number().required(),
                 resolution_width: Joi.number().required(),
                 window_height: Joi.number().required(),
                 window_width: Joi.number().required(),
                 pixel_ratio: Joi.number().required(),
-                mouse: Joi.boolean().required(),
-                pen: Joi.boolean().required(),
-                finger: Joi.boolean().required(),
-                acceleration: Joi.boolean().required(),
-                webcam: Joi.boolean().required()
-            }
+                mouse: Joi.boolean().valid(true),
+                pen: Joi.boolean().valid(true),
+                finger: Joi.boolean().valid(true),
+                acceleration: Joi.boolean().valid(true),
+                webcam: Joi.boolean().valid(true)
+            }).xor('mouse', 'pen', 'finger', 'acceleration', 'webcam')
         }),
 
         idSchema: Joi.object().keys({

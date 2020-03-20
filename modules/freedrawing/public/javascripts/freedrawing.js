@@ -3,9 +3,15 @@
     
     // TODO: cleanup and better structure code
     // TODO: check CSS size on smaller screens
+    /* TODO: save gesture representations (fabric canvas)
+        canvasJSON = JSON.parse(JSON.stringify(canvas));
+        console.log(canvasJSON);
+        canvas.loadFromJSON(canvasJSON);
+    */
 
+    
     // how to prevent Android browser to resize window when soft keyboard is on - Stackoverflow
-    var meta = document.createElement('meta');
+    const meta = document.createElement('meta');
     meta.name = 'viewport';
     meta.content = 'width=device-width,height=' + window.innerHeight + ', initial-scale=1.0';
     document.getElementsByTagName('head')[0].appendChild(meta);
@@ -108,6 +114,7 @@
                     gestureName.value = "";
                     window.addEventListener('resize', resizeCanvas);
                     resizeCanvas();
+                    
                 }
             });
 
@@ -151,7 +158,7 @@
     localhost = location.hostname;
     // saves gesture to database
     async function saveGesture(name, subject) {
-        newGesture = new Gesture(name, subject, strokes, getDeviceInfo());
+        let newGesture = new Gesture(name, subject, strokes, getDeviceInfo());
 
         response = await fetch(`http://${localhost}:5050/gestures`, {
             method: 'POST',
@@ -164,9 +171,9 @@
             saveFailed();
         });
 
-        apiRes = await response;
+        let apiRes = await response;
         if (400 <= apiRes.status && apiRes.status < 600) {
-            apiResJson = await apiRes.json();
+            let apiResJson = await apiRes.json();
             console.error('API RESPONSE', apiResJson.details[0].message);
             saveFailed();
         } else {
@@ -175,10 +182,10 @@
     }
 
     function getDeviceInfo() {
-        device = new Device(canvas.getHeight(), canvas.getWidth());
+        let device = new Device(canvas.getHeight(), canvas.getWidth());
 
-        modalityElem = document.getElementById('modality');
-        modality = modalityElem.querySelector(".active").id;
+        const modalityElem = document.getElementById('modality');
+        const modality = modalityElem.querySelector(".active").id;
 
         device[modality] = true;
         return device;

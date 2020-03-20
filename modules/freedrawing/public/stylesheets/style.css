@@ -1,0 +1,152 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+  font-size: 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* display: block; */
+}
+
+#canvasDiv {
+  position: relative;
+}
+
+#canvas, #btnOverlay {
+  position: absolute;
+}
+
+:root {
+  --width: 40px;
+  --heigth: 40px;
+  --burger-width: 23px;
+  --burger-height: 3px;
+  --border-radius: 4px;
+  --translateM: -9px;
+  --translateP: 9px;
+}
+
+.alert.alert-primary {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  margin: 10px;
+  border-radius: 10px;
+  pointer-events: none;
+  /* height: var(--heigth); */
+  /* display:inline-block; */
+}
+.alert.alert-primary.invisible{
+  display: none;
+}
+
+/* https://github.com/codeSTACKr/hamburger-animation */
+.buttonContainer {
+  top: 0px;
+  right: 0px;
+  margin: 10px;
+  background: #272727;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--width);
+  height: var(--heigth);
+  border-radius: 10px;
+  border: 2px solid #fff;
+  z-index: 2;
+}
+
+.buttonContainer.invisible {
+  display: none;
+}
+
+.menu-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--width);
+  height: var(--heigth);
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+}
+
+.menu-btn__burger {
+  width: var(--burger-width);
+  height: var(--burger-height);
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(255, 101, 47, .2);
+  transition: all .5s ease-in-out;
+}
+
+.menu-btn__burger::before, .menu-btn__burger::after {
+  content: '';
+  position: absolute;
+  width: var(--burger-width);
+  height: var(--burger-height);
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(255, 101, 47, .2);
+  transition: all .5s ease-in-out;
+}
+
+.menu-btn__burger::before {
+  transform: translateY(var(--translateM));
+}
+
+.menu-btn__burger::after {
+  transform: translateY(var(--translateP));
+}
+
+/* ANIMATION */
+
+.menu-btn.open .menu-btn__burger {
+  transform: translateX(-50px);
+  background: transparent;
+  box-shadow: none;
+}
+
+.menu-btn.open .menu-btn__burger::before {
+  transform: rotate(45deg) translate(35px, -35px);
+}
+
+.menu-btn.open .menu-btn__burger::after {
+  transform: rotate(-45deg) translate(35px, 35px);
+}
+
+.menuOverlay {
+  position:absolute;
+  justify-content: center;
+  top:0px;
+  left:0px;
+  background-color: rgba(0, 2, 95, 0.6);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* text-align: center; */
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+.menuOverlay.invisible {
+  display: none;
+}
+
+#gestureName{
+  width: 100%;
+  margin: 5px;
+}
+
+.btn {
+  width: 100%;
+  margin: 5px;
+}
+
+#buttonAlignment {
+  width: 218px;
+}
+

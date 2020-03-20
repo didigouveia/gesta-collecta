@@ -1,5 +1,5 @@
 # gesta-collecta
-A microservice Web App for collecting gestures from different devices
+A microservice Web App for collecting gestures from various devices
 
 In progress..
 

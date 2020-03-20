@@ -9,7 +9,8 @@
     "server-dev": "nodemon server/app.js",
     "freedrawing": "npm run dev --prefix modules/freedrawing",
     "mongo": "C:\\\"Program Files\"\\MongoDB\\Server\\4.2\\bin\\mongod.exe",
-    "dev": "concurrently \"npm run mongo\" \"npm run server-dev\" \"npm run freedrawing\""
+    "dev": "concurrently \"npm run mongo\" \"npm run server-dev\" \"npm run freedrawing\"",
+    "postinstall": "cd modules/freedrawing && npm install"
   },
   "author": "Dilara Gouveia",
   "license": "ISC",

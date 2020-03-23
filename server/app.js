@@ -1,16 +1,15 @@
 const express = require('express');
 const logger = require('morgan');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/gesta-collecta',
-    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-    .catch(function (reason) {
-        console.log('Unable to connect to the mongodb instance. Error: ', reason);
-    });
-
+// mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://localhost/gesta-collecta',
+//     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+//     .catch(function (reason) {
+//         console.log('Unable to connect to the mongodb instance. Error: ', reason);
+//     });
 
 const app = express();
 

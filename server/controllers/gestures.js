@@ -23,14 +23,14 @@ module.exports = {
             });
 
             res.status(200).json(gestures);
-        });        
+        });
     },
 
     newGesture: (req, res, next) => {
         const newGesture = req.value.body;
         pointifyStrokes(newGesture);
 
-        db.collection('gestures').add(newGesture).then(ref => {            
+        db.collection('gestures').add(newGesture).then(ref => {
             res.status(201).json({
                 id: ref.id,
                 gesture: newGesture
@@ -38,10 +38,17 @@ module.exports = {
         });
     },
 
-    getGesture: async (req, res, next) => {
+    getGesture: (req, res, next) => {
         const { gestureId } = req.value.params;
-        const gesture = await Gesture.findById(gestureId);
-        res.status(200).json(gesture);
+        console.log(gestureId);
+        db.collection('gestures')
+            .doc(gestureId)
+            .get().then(doc => {
+                const fsGesture = doc.data();
+                strokifyPoints(fsGesture);
+
+                res.status(200).json(fsGesture);
+            });
     }
 };
 
@@ -55,7 +62,7 @@ function pointifyStrokes(gesture) {
 }
 
 function strokifyPoints(fsGesture) {
-    const pointsArray = fsGesture.strokes; 
+    const pointsArray = fsGesture.strokes;
     const strokes2dArray = [];
     for (const point of pointsArray) {
         if (!strokes2dArray[point.strokeId]) {

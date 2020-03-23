@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi')
-    .extend(require('@hapi/joi-date'));
+    .extend(require('@hapi/joi-date')); // TODO: check if needed and remove
 
 module.exports = {
     validateParam: (schema, name) => {
@@ -50,7 +50,7 @@ module.exports = {
                         alpha: Joi.number().allow(null).required(),
                         beta: Joi.number().allow(null).required(),
                         gamma: Joi.number().allow(null).required(),
-                        t: Joi.date().timestamp(),
+                        t: Joi.date().timestamp().required().raw(),
                         strokeId: Joi.number().required()
                     }))),
             device: Joi.object().keys({
@@ -69,7 +69,7 @@ module.exports = {
         }),
 
         idSchema: Joi.object().keys({
-            param: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+            param: Joi.string().regex(/^(?!\.\.?$)(?!.*__.*__)([^/]{1,1500})$/).required()
         })
     }
 };

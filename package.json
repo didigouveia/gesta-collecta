@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/app.js",
     "server-dev": "nodemon server/app.js",
-    "freedrawing": "npm run dev --prefix modules/freedrawing",
-    "mongo": "C:\\\"Program Files\"\\MongoDB\\Server\\4.2\\bin\\mongod.exe",
-    "dev": "concurrently \"npm run mongo\" \"npm run server-dev\" \"npm run freedrawing\""
+    "freedrawing-dev": "npm run dev --prefix modules/freedrawing",
+    "dev": "concurrently \"npm run server-dev\" \"npm run freedrawing-dev\""
   },
   "author": "Dilara Gouveia",
   "license": "ISC",
@@ -20,6 +19,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
+    "firebase-admin": "^8.10.0",
     "helmet": "^3.21.3",
     "joi": "^14.3.1",
     "mongoose": "^5.9.4",

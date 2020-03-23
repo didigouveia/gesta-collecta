@@ -8,7 +8,8 @@
     "start": "node server/app.js",
     "server-dev": "nodemon server/app.js",
     "freedrawing-dev": "npm run dev --prefix modules/freedrawing",
-    "dev": "concurrently \"npm run server-dev\" \"npm run freedrawing-dev\""
+    "dev": "concurrently \"npm run server-dev\" \"npm run freedrawing-dev\"",
+    "postinstall": "cd modules/freedrawing && npm install"
   },
   "author": "Dilara Gouveia",
   "license": "ISC",

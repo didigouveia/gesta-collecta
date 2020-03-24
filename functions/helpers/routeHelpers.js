@@ -13,7 +13,7 @@ module.exports = {
                 if (!req.value.params)
                     req.value.params = {};
                 req.value.params[name] = result.value.param;
-                next();
+                return next();
             }
         };
     },
@@ -30,7 +30,7 @@ module.exports = {
                     req.value.body = {};
                 addModalityFields(result.value);
                 req.value.body = result.value;
-                next();
+                return next();
             }
         };
     },

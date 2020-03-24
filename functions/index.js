@@ -1,23 +1,31 @@
+const functions = require('firebase-functions');
 const express = require('express');
 const logger = require('morgan');
-// const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://localhost/gesta-collecta',
-//     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-//     .catch(function (reason) {
-//         console.log('Unable to connect to the mongodb instance. Error: ', reason);
-//     });
-
 const app = express();
+const main = express();
+
+var whitelist = ['https://gesta-collecta.firebaseapp.com/'];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  }
+}
 
 // Middleware
-app.use(helmet());
-app.use(logger('dev'));
-app.use(express.json({ limit: '50mb' }));
-app.use(cors());
+main.use(cors(corsOptions));
+main.use('/v1', app);
+main.use(helmet());
+main.use(logger('dev'));
+main.use(express.json({ limit: '50mb' }));
+
+exports.api = functions.https.onRequest(main);
 
 // Routes
 app.use('/gestures', require('./routes/gestures'));
@@ -45,6 +53,4 @@ app.use((err, req, res, next) => {
 
 });
 
-// Start the server
-const port = process.env.PORT || 5050;
-app.listen(port, () => console.log(`gesta-collecta: server listening on port ${port}`));
+exports.app = app;

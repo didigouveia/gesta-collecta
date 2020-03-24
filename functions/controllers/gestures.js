@@ -34,8 +34,8 @@ module.exports = {
 
         db.collection('gestures').add(newGesture).then(ref => {
             res.status(201).json({
-                id: ref.id,
-                gesture: newGesture
+                id: ref.id
+                // gesture: newGesture
             });
             return null;
         }).catch(error => { 

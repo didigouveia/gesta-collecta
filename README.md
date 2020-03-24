@@ -4,7 +4,7 @@ A microservice Web App for collecting gestures from various devices
 In progress..
 
 ## REST API
-https://us-central1-gesta-collecta.cloudfunctions.net/api/v1/
+https://us-central1-gesta-collecta.cloudfunctions.net/api/v1
 
     GET /gestures    
     GET /gestures/:id

@@ -155,12 +155,12 @@
         alertBox.innerHTML = "Draw something!";
     }
 
-    localhost = location.hostname;
+    api = 'https://us-central1-gesta-collecta.cloudfunctions.net/api/v1'; //TODO: add to constants or utilities file
     // saves gesture to database
     async function saveGesture(name, subject) {
         let newGesture = new Gesture(name, subject, strokes, getDeviceInfo());
 
-        response = await fetch(`http://${localhost}:5050/gestures`, {
+        response = await fetch(`${api}/gestures`, {
             method: 'POST',
             body: JSON.stringify(newGesture),
             headers: {

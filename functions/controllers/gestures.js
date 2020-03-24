@@ -1,19 +1,17 @@
 
+const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const serviceAccount = require('../../../gesta-collecta-firebase-adminsdk-d9hs7-b3e72b43e9');
 
 // TODO: tidy up code
 
 // firebase admin sdk init
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+admin.initializeApp(functions.config().firebase);
 
 // database connection
 const db = admin.firestore();
 
 module.exports = {
-    index: (req, res, next) => {
+    index: (req, res, next) => {        
         db.collection('gestures').get().then(snapshot => {
             const gestures = [];
             snapshot.docs.forEach(doc => {
@@ -23,7 +21,11 @@ module.exports = {
             });
 
             res.status(200).json(gestures);
+            return null;
+        }).catch(error => { 
+            res.status(500).json(error);
         });
+
     },
 
     newGesture: (req, res, next) => {
@@ -32,9 +34,12 @@ module.exports = {
 
         db.collection('gestures').add(newGesture).then(ref => {
             res.status(201).json({
-                id: ref.id,
-                gesture: newGesture
+                id: ref.id
+                // gesture: newGesture
             });
+            return null;
+        }).catch(error => { 
+            res.status(500).json(error);
         });
     },
 
@@ -48,6 +53,9 @@ module.exports = {
                 strokifyPoints(fsGesture);
 
                 res.status(200).json(fsGesture);
+                return null;
+            }).catch(error => { 
+                res.status(500).json(error);
             });
     }
 };

@@ -2,24 +2,13 @@ const functions = require('firebase-functions');
 const express = require('express');
 const logger = require('morgan');
 const helmet = require('helmet');
-const cors = require('cors');
+const cors = require('cors')({origin: true});
 
-const app = express();
 const main = express();
-
-var whitelist = ['https://gesta-collecta.firebaseapp.com/'];
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('Not allowed by CORS'));
-    }
-  }
-}
+const app = express();
 
 // Middleware
-main.use(cors(corsOptions));
+main.use(cors);
 main.use('/v1', app);
 main.use(helmet());
 main.use(logger('dev'));

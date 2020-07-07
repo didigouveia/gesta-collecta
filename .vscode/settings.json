@@ -1,6 +1,7 @@
 {
     "editor.fontSize": 16,
     "editor.autoIndent": "full",
+    "editor.formatOnSave": true,
     "emmet.includeLanguages": {
         "javascript": "javascriptreact"
     },

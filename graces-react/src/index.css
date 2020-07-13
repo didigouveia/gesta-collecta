@@ -3,28 +3,43 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background-color: #e3f2fd; */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-#canvasDraw {
-  display: inline-block;
+#dashboard {
+  height: calc(100vh - 65px);
 }
 
-.sidenav {
+/* 
+#dashcard {
+  width: 600px;
+} */
+
+#canvasDraw {
+  /* display: inline-block; */
+  width: calc(100vh - 300px);
+  height: 100vh;
+}
+
+.sidePanel {
   padding-top: 20px;
   max-width: 300px;
+  height: 100vh;
+  float: right;
+  overflow: auto;
 }
 
-.sidenavElem {
+.sidePanelElem {
   padding-left: 30px;
   padding-bottom: 20px;
   padding-right: 30px;
 }
 
-.sidenavLabel {
+.sidePanelLabel {
   color: black;
   font-size: 14px;
   font-weight: 600;

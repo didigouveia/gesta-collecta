@@ -1,19 +1,22 @@
 import React from 'react';
-import CanvasDrawComponent from './components/CanvasDrawComponent'
-import CanvasContextProvider from './contexts/CanvasContext';
-import CanvasControlPanel from './components/CanvasControlPanel';
+// import CanvasDrawComponent from './components/CanvasDrawComponent'
+// import CanvasContextProvider from './contexts/CanvasContext';
+// import CanvasControlPanel from './components/CanvasControlPanel';
+// import Navbar from './components/Navbar'
+import Dashboard from './components/Dashboard';
+import Freedrawing from './components/Freedrawing';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BASENAME } from './utils/GlobalConstants'
 
 function App() {
   return (
     <div className="App">
-      <CanvasContextProvider>
-        <CanvasControlPanel />
-        <CanvasDrawComponent id={1}
-          canvasWidth={800}
-          canvasHeight={800}
-          hideGrid={false}
-          gridColor='rgba(150,150,150,0.30)' /> {/* rgba(150,150,150,0.17)*/}
-      </CanvasContextProvider>
+      <BrowserRouter basename={BASENAME} >
+        <Switch>
+          <Route exact path={'/'} component={Dashboard} />
+          <Route exact path={'/freedrawing'} component={Freedrawing} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }

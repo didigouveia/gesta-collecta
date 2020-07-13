@@ -4,6 +4,10 @@ import { CanvasContext } from "../contexts/CanvasContext";
 
 class CanvasDrawComponent extends Component {
   static contextType = CanvasContext;
+  state = {
+    canvasWidth: window.innerWidth - 300,
+    canvasHeight: window.innerHeight
+  }
 
   componentDidMount() {
     // window.addEventListener("resize", this.update);
@@ -25,7 +29,7 @@ class CanvasDrawComponent extends Component {
       loadTimeOffset, immediateLoading, backgroundColor,
       getRef, onChange, onPointerMove, onPointerDown,
       onPointerUp, onPointerLeave } = this.context;
-    const { canvasWidth, canvasHeight,
+    const { /*canvasWidth, canvasHeight,*/
       gridColor, hideGrid } = this.props;
     return (
       <div id='canvasDraw'
@@ -39,8 +43,8 @@ class CanvasDrawComponent extends Component {
           onChange={onChange}
           backgroundColor={backgroundColor}
           brushColor={brushColor}
-          canvasWidth={canvasWidth}
-          canvasHeight={canvasHeight}
+          canvasWidth={this.state.canvasWidth}
+          canvasHeight={this.state.canvasHeight}
           brushRadius={brushRadius}
           lazyRadius={lazyRadius}
           catenaryColor={catenaryColor}

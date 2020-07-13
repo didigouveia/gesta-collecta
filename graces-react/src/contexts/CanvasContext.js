@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react';
-import { Point } from '../utils/gestureFormat_v1/Point'
+// const { Point } = require('../utils/gestureFormat_v1/Point');
+import Point from '../utils/gestureFormat_v1/Point';
 
 export const CanvasContext = createContext();
 
@@ -137,11 +138,15 @@ class CanvasContextProvider extends Component {
     this.state.currStroke.push(point);
   }
   onPointerUp = () => {
-    this.state.strokes.push(this.state.currStroke);
-    this.setState({
-      stroke_id: this.state.stroke_id + 1,
-      currStroke: []
-    })
+    // console.log('pointer up');
+    // console.log(this.state.currStroke.length);
+    if (this.state.currStroke.length) {
+      this.state.strokes.push(this.state.currStroke);
+      this.setState({
+        stroke_id: this.state.stroke_id + 1,
+        currStroke: []
+      })
+    }
   }
   onPointerLeave = () => {
     if (this.state.pointerDown && this.state.currStroke.length) {

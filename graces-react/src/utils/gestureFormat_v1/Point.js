@@ -1,6 +1,5 @@
-
 class Point {
-  constructor (x, y, t, stroke_id) {
+  constructor(x, y, t, stroke_id) {
     this.x = x;
     this.y = y;
     this.w = null;
@@ -13,6 +12,4 @@ class Point {
   }
 }
 
-module.exports = {
-  Point
-};
+export default Point;

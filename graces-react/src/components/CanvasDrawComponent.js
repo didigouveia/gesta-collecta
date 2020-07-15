@@ -6,16 +6,11 @@ class CanvasDrawComponent extends Component {
   static contextType = CanvasContext;
 
   componentDidMount() {
-    // window.addEventListener("resize", this.update);
-    // this.update();
-  }
-
-  componentDidUpdate() {
-
-  }
-
-  componentWillUnmount() {
-    // window.removeEventListener("resize", this.update);
+    // console.log('CanvasDrawComponent did mount');
+    const { handleCanvasWidth, handleCanvasHeight } = this.context;
+    const { canvasWidth, canvasHeight } = this.props;
+    handleCanvasWidth(canvasWidth);
+    handleCanvasHeight(canvasHeight);
   }
 
   render() {
@@ -24,9 +19,8 @@ class CanvasDrawComponent extends Component {
       catenaryColor, hideInterface, disabled,
       loadTimeOffset, immediateLoading, backgroundColor,
       getRef, onChange, onPointerMove, onPointerDown,
-      onPointerUp, onPointerLeave } = this.context;
-    const { canvasWidth, canvasHeight,
-      gridColor, hideGrid } = this.props;
+      onPointerUp, onPointerLeave, canvasWidth, canvasHeight } = this.context;
+    const { gridColor, hideGrid } = this.props;
     return (
       <div id='canvasDraw'
         onPointerMove={onPointerMove}

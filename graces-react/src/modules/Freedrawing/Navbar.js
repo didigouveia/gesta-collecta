@@ -1,42 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { Link } from 'react-router-dom';
 import { Switch } from 'react-materialize';
+import { CanvasContext } from '../../contexts/CanvasContext';
 
 const Navbar = (props) => {
   const [fixedSidePanel, setSidePanel] = useState(() => {
-    console.log('here');
     const localData = localStorage.getItem('fixedSidePanel');
     return localData ? JSON.parse(localData) : false
   });
-
-  // const [fixedSidePanel, setSidePanel] = useState(false);
+  // const [sideNavInit, setSideNavInit] = useState(null);
 
   const handleSidePanel = () => {
     setSidePanel(!fixedSidePanel);
   }
 
+  const { handleCanvasWidth, handleCanvasHeight/*, canvasWidth, canvasHeight*/ } = useContext(CanvasContext);
   useEffect(() => {
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidePanelElems = document.querySelectorAll('.sidenav');
-      const options = {
-        edge: 'right'
-      }
-      M.Sidenav.init(sidePanelElems, options);
-    });
-
+    const sidePanelElems = document.querySelectorAll('.sidenav');
+    const options = {
+      edge: 'right'
+    }
+    M.Sidenav.init(sidePanelElems, options)
     const sidePanelButtonElems = document.getElementsByClassName("sidePanelButton");
+    const sidePanel = document.getElementById("slide-out");
     if (!fixedSidePanel) {
       for (let i = 0; i < sidePanelButtonElems.length; i++) {
         sidePanelButtonElems[i].style.visibility = 'visible';
       }
+      sidePanel.classList.remove('sidePanel');
+      sidePanel.classList.add('sidenav');
     } else {
       for (let i = 0; i < sidePanelButtonElems.length; i++) {
         sidePanelButtonElems[i].style.visibility = 'hidden';
       }
+      sidePanel.classList.remove('sidenav');
+      sidePanel.classList.add('sidePanel');
     }
     localStorage.setItem('fixedSidePanel', JSON.stringify(fixedSidePanel));
-  });
+
+    const sidePanelOffset = (fixedSidePanel) ? 300 : 0;
+    handleCanvasWidth(window.innerWidth - sidePanelOffset);
+    handleCanvasHeight(window.innerHeight - 71);
+
+    // console.log(canvasWidth, canvasHeight);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fixedSidePanel])
 
 
 

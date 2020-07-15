@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
-import { CanvasContext } from '../contexts/CanvasContext';
+import { CanvasContext } from '../../contexts/CanvasContext';
 import { CompactPicker } from 'react-color';
 import { Switch } from 'react-materialize';
 
@@ -9,13 +9,13 @@ const CanvasControlPanel = () => {
   const lazyRadiusRef = useRef(null);
   const loadTimeOffsetRef = useRef(null);
   useEffect(() => {
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidePanelElems = document.querySelectorAll('.sidenav');
-      const options = {
-        edge: 'right'
-      }
-      M.Sidenav.init(sidePanelElems, options);
-    });
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   const sidePanelElems = document.querySelectorAll('.sidenav');
+    //   const options = {
+    //     edge: 'right'
+    //   }
+    //   M.Sidenav.init(sidePanelElems, options);
+    // });
     M.Range.init(brushRadiusRef.current);
     M.Range.init(lazyRadiusRef.current);
     M.Range.init(loadTimeOffsetRef.current);
@@ -33,7 +33,7 @@ const CanvasControlPanel = () => {
 
   return (
     <div>
-      <div className="sidePanel blue lighten-5">
+      <ul id="slide-out" className="sidenav blue lighten-5">
 
         <div className="sidePanelElem">
           <label className="sidePanelLabel" >Catenary Color</label>
@@ -144,7 +144,7 @@ const CanvasControlPanel = () => {
           </div>
 
         </div>
-      </div>
+      </ul>
       {/* <a href="/#" data-target="slide-out" className="sidenav-trigger right"><i className="material-icons">menu</i></a> */}
     </div>
   );

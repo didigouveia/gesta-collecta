@@ -32,10 +32,12 @@ class CanvasContextProvider extends Component {
   }
 
   getRef = (canvasDraw) => {
-    this.setState({
-      canvas: canvasDraw,
-      saveData: canvasDraw.getSaveData()
-    })
+    if (canvasDraw) {
+      this.setState({
+        canvas: canvasDraw,
+        saveData: canvasDraw.getSaveData()
+      })
+    }
   };
   handleBrushColor = (color) => {
     this.setState({ brushColor: color.hex });
@@ -128,6 +130,7 @@ class CanvasContextProvider extends Component {
     }
   }
   onPointerDown = (e) => {
+    console.log('pointer down');
     this.setState({
       pointerDown: true,
       undoButtonAvail: ""

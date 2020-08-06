@@ -83,6 +83,7 @@ const CanvasControlPanel = () => {
           checked={!hideInterface}
         />
       </div>
+
       <div className="sidePanelElem">
         <div id="gestureFunctionsLabel"><label className="sidePanelLabel" >Gesture functions</label></div>
 
@@ -127,7 +128,6 @@ const CanvasControlPanel = () => {
             onClick={clearGesture}
           >Clear saved gesture</button>
         </div>
-
 
         <div className="buttonRow row">
           <button className={"waves-effect waves-light btn-small col s12 " + loadButtonAvail}

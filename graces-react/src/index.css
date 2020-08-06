@@ -1,11 +1,12 @@
 body {
   margin: 0;
-  /* padding: 0;
-  border: 0; */
+  padding: 0;
+  border: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* background-color: #e3f2fd; */
+  /* overflow-x: hidden; */
 }
 
 code {
@@ -21,14 +22,15 @@ code {
   width: 600px;
 } */
 
-/* #fdContainer {
+#floatContainer {
   background-color: lawngreen;
-} */
+}
 
 #canvasDraw {
-  display: inline-block;
+  /* display: inline-block; */
   line-height: 0;
-  /* float: left; */
+  background-color: lawngreen;
+  float: left;
   /* width: calc(100vh - 300px);
   height: calc(100vh - 71px); */
 }
@@ -37,11 +39,20 @@ code {
   padding-top: 20px;
 }
 
+#MyoDataDisplay {
+  line-height: 0;
+  /* background-color: lawngreen; */
+  float: left;
+  width: calc(100vw - 300px);
+  height: calc(100vh - 71px);
+}
+
 .sidePanel {
+  margin: 0;
   padding-top: 20px;
   width: 300px;
   height: calc(100vh - 71px);
-  float: right;
+  float: left;
   overflow: auto;
 }
 

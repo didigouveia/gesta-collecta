@@ -1,6 +1,5 @@
-
 class GestureSample {
-  constructor (name, subject, date, strokes, device) {
+  constructor(name, subject, date, strokes, device) {
     this.name = name;
     this.subject = subject;
     this.date = date;
@@ -9,6 +8,4 @@ class GestureSample {
   }
 }
 
-module.exports = {
-  GestureSample
-};
+export default GestureSample;

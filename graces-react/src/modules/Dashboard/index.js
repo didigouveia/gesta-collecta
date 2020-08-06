@@ -14,9 +14,9 @@ const Dashboard = () => {
                 style={{ marginBottom: 1 + 'em', width: 200 + 'px' }}
               >Free drawing</Link>
               <div>
-                <Link to={'/'} className="waves-effect waves-light btn-large blue darken-2"
+                <Link to={'/myoarmband'} className="waves-effect waves-light btn-large blue darken-2"
                   style={{ /*marginBottom: 1 + 'em',*/ width: 200 + 'px' }}
-                >Placeholder</Link>
+                >Myo Armband</Link>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { Component, createContext } from 'react'
-// const { Point } = require('../utils/gestureFormat_v1/Point')
 import Point from '../utils/gestureFormat_v1/Point'
+// import Device from '../utils/gestureFormat_v1/Device'
+// import GestureSample from '../utils/gestureFormat_v1/GestureSample'
 
 export const CanvasContext = createContext()
 
@@ -170,6 +171,7 @@ class CanvasContextProvider extends Component {
   downloadGesture = () => {
     console.log(this.state.savedStrokes)
     //TODO
+
   }
 
   render() {

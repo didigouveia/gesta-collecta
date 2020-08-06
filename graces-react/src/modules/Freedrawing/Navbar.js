@@ -3,6 +3,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 import { Link } from 'react-router-dom';
 import { Switch } from 'react-materialize';
 import { CanvasContext } from '../../contexts/CanvasContext';
+import { SPOFFSET, NAVOFFSET } from '../../utils/GlobalConstants'
 
 const Navbar = (props) => {
   const [fixedSidePanel, setSidePanel] = useState(() => {
@@ -39,9 +40,9 @@ const Navbar = (props) => {
     }
     localStorage.setItem('fixedSidePanel', JSON.stringify(fixedSidePanel));
 
-    const sidePanelOffset = (fixedSidePanel) ? 300 : 0;
+    const sidePanelOffset = (fixedSidePanel) ? SPOFFSET : 0;
     handleCanvasWidth(window.innerWidth - sidePanelOffset);
-    handleCanvasHeight(window.innerHeight - 71);
+    handleCanvasHeight(window.innerHeight - NAVOFFSET);
 
     // console.log(canvasWidth, canvasHeight);
     // eslint-disable-next-line react-hooks/exhaustive-deps

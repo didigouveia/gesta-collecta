@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
-import { CanvasContext } from '../../contexts/CanvasContext';
+import { CanvasContext } from './CanvasContext';
 import { CompactPicker } from 'react-color';
 import { Switch } from 'react-materialize';
 

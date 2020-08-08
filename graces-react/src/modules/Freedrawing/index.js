@@ -1,7 +1,7 @@
 import React from 'react';
-import CanvasDrawComponent from '../../components/CanvasDrawComponent';
+import CanvasDrawComponent from './CanvasDrawComponent';
 import CanvasControlPanel from './CanvasControlPanel';
-import CanvasContextProvider from '../../contexts/CanvasContext'
+import CanvasContextProvider from './CanvasContext'
 import Navbar from './Navbar'
 import { SPOFFSET, NAVOFFSET } from '../../utils/GlobalConstants'
 

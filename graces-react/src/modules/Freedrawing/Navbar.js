@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { Link } from 'react-router-dom';
 import { Switch } from 'react-materialize';
-import { CanvasContext } from '../../contexts/CanvasContext';
+import { CanvasContext } from './CanvasContext';
 import { SPOFFSET, NAVOFFSET } from '../../utils/GlobalConstants'
 
 const Navbar = (props) => {
@@ -54,7 +54,7 @@ const Navbar = (props) => {
     <nav>
       <div className="nav-wrapper blue darken-4">
         <div className="container">
-          <Link to="/#" className="brand-logo left">GRACES</Link>
+          <Link to="/#" className="brand-logo center">GRACES</Link>
           <ul className="right">
             <li><Link to="#" data-target="slide-out"
               className="sidePanelButton sidenav-trigger show-on-large" style={{ 'visibility': 'visible' }}>

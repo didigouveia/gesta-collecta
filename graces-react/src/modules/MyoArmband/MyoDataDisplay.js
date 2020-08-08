@@ -4,14 +4,13 @@ import Myo from 'myo'
 
 
 const MyoDataDisplay = (props) => {
-  const [connectionStatus, setConStatus] = useState("Myo Armband disconnected...")
+  // const [connectionStatus, setConStatus] = useState("Myo Armband disconnected...")
   const [myoLog, setMyoLog] = useState("Myo Armband disconnected...");
   const [orientation, setOrientation] = useState({ x: 0, y: 0, z: 0, w: 0 });
   const [gyroscope, setGyroscope] = useState({ x: 0, y: 0, z: 0 });
   const [accelerometer, setAccelerometer] = useState({ x: 0, y: 0, z: 0 });
 
   const { pushToCurrStrokes, pushToStrokes } = useContext(MyoContext);
-
   // https://www.pluralsight.com/guides/event-listeners-in-react-components
   useEffect(() => {
     Myo.connect("com.uclouvain.graces");
@@ -108,13 +107,13 @@ const MyoDataDisplay = (props) => {
           Keep fist clenched to record a stroke.
         </h6>
 
-        <h5>
-          {"Strokes recorded: " + orientStrokes.length}
-        </h5>
-        <br />
         <h6>
           {myoLog}
         </h6>
+        <br />
+        <h5>
+          {"Strokes recorded: " + orientStrokes.length}
+        </h5>
 
       </div>
 

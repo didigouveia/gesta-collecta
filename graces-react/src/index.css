@@ -71,3 +71,7 @@ code {
 #gestureFunctionsLabel {
   padding-bottom: 12px;
 }
+
+.fixRowMargin {
+  height: 15px !important;
+}

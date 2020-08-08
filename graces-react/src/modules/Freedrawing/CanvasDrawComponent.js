@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CanvasDraw from "react-canvas-draw";
-import { CanvasContext } from "../contexts/CanvasContext";
+import { CanvasContext } from "./CanvasContext";
 
 class CanvasDrawComponent extends Component {
   static contextType = CanvasContext;

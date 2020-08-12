@@ -1,9 +1,9 @@
-import Dashboard from './Dashboard';
+import Homepage from './Homepage';
 import Freedrawing from './Freedrawing';
 import MyoArmband from './MyoArmband';
 
 export default [
-  Dashboard,
+  Homepage,
   Freedrawing,
   MyoArmband
 ];

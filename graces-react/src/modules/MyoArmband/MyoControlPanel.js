@@ -1,61 +1,34 @@
-import React, { useContext, useEffect } from 'react';
-// import { lockingPolicy } from 'myo';
+import React, { useContext } from 'react';
 import { MyoContext } from './MyoContext';
-// import M from 'materialize-css/dist/js/materialize.min.js';
-// import { CanvasContext } from '../../contexts/CanvasContext';
-// import { CompactPicker } from 'react-color';
-// import { Switch } from 'react-materialize';
 
 const MyoControlPanel = () => {
 
-
-  useEffect(() => {
-
-  }, []);
-
-  // const {
-  //   brushColor, brushRadius, lazyRadius,
-  //   catenaryColor, hideInterface, backgroundColor,
-  //   handleBrushColor, handleBackgroundColor, handleCatenaryColor,
-  //   handleBrushRadius, handleLazyRadius, handleInterface,
-  //   handleLoadTimeOffset, loadTimeOffset,
-  //   loadButtonAvail, clearCanvas, undoCanvas, saveCanvas,
-  //   loadCanvas, clearGesture, downloadGesture, undoButtonAvail
-  // } = useContext(CanvasContext);
-
   const {
-    setName, sampleName, subjectID,
-    setSetName, setSampleName, setSubjectID,
-    handleDownload
+    sampleName, subjectID, attemptNb,
+    setSampleName, setSubjectID, setAttemptNb,
+    handleForm, undoStroke, clearGesture
   } = useContext(MyoContext);
   return (
     <div className="sidePanel blue lighten-5">
 
-      <div className="sidePanelElem">
+      <div className="myoPanelElem">
         <label className="sidePanelLabel" >Gesture Sample Info</label>
 
-        <div className="row">
-          <form onSubmit={handleDownload} className="col s12">
+        <div className="row" /*style={{ marginBottom: '0px' }}*/>
+          <form id="myoForm" onSubmit={handleForm} className="col s12">
 
             <div className="row">
-              <div className="input-field col s12 fixRowMargin">
-                <input id="gesture_set" type="text" className="validate" required
-                  value={setName} onChange={(e) => setSetName(e.target.value)}
-                />
-                <label htmlFor="gesture_set">Gesture Set Name</label>
-              </div>
-            </div>
-            <div className="row">
-              <div className="input-field col s12 fixRowMargin">
+              <div className="input-field col s12 fixInputMargin">
                 <input id="gesture_sample" type="text" className="validate" required
                   value={sampleName} onChange={(e) => setSampleName(e.target.value)}
                 />
                 <label htmlFor="gesture_sample">Gesture Sample Name</label>
               </div>
             </div>
+
             <div className="row">
-              <div className="input-field col s12 fixRowMargin">
-                <input id="subject" type="number" className="validate" required
+              <div className="input-field col s12 fixInputMargin">
+                <input id="subject" type="number" min="0" className="validate" required
                   value={subjectID} onChange={(e) => setSubjectID(e.target.value)}
                 />
                 <label htmlFor="subject">Subject ID</label>
@@ -63,9 +36,12 @@ const MyoControlPanel = () => {
             </div>
 
             <div className="row">
-              <button type="submit" id="MyoDownloadButton" className="input-field waves-effect waves-light btn-small col s12 disabled">
-                Download gesture sample
-                </button>
+              <div className="input-field col s12 fixInputMargin">
+                <input id="attemptNb" type="number" min="0" className="validate" required
+                  value={attemptNb} onChange={(e) => setAttemptNb(e.target.value)}
+                />
+                <label className="active" htmlFor="attemptNb">Attempt #</label>
+              </div>
             </div>
 
           </form>
@@ -73,18 +49,38 @@ const MyoControlPanel = () => {
 
       </div>
 
-      <div className="sidePanelElem">
-        <label className="sidePanelLabel" >Background Color</label>
+      <div className="myoPanelElem">
+        <label className="sidePanelLabel">Gesture Sample Functions</label>
 
-      </div>
+        <div className="row" style={{ marginTop: '10px' }}>
+          <div className="col s8 offset-s2">
+            <button className="red waves-effect waves-light btn-small"
+              style={{ width: '140px' }} onClick={undoStroke}>
+              Undo stroke</button>
+          </div>
+        </div>
 
-      <div className="sidePanelElem">
-        <label className="sidePanelLabel" >Brush Color</label>
+        <div className="row">
 
-      </div>
+          <button className="red waves-effect waves-light btn-small col s12"
+            onClick={clearGesture}>
+            Clear gesture sample</button>
 
-      <div className="sidePanelElem">
-        <label className="sidePanelLabel" >Brush Interface</label>
+        </div>
+
+        <div className="row fixRowMargin">
+          <button type="submit" name="submit" form="myoForm"
+            className="input-field waves-effect waves-light btn-small col s12 MyoDownloadButton disabled">
+            Submit gesture sample
+          </button>
+        </div>
+
+        <div className="row fixRowMargin">
+          <button type="submit" name="download" form="myoForm"  /*onClick={handleDownload}*/
+            className="input-field waves-effect waves-light btn-small col s12 MyoDownloadButton disabled">
+            Download gesture sample
+          </button>
+        </div>
 
       </div>
 

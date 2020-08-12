@@ -11,12 +11,11 @@ class Device {
     this.pen = false;
     this.finger = false;
     this.acceleration = false;
-    this.gyroscope = false;
-    this.orientation = false;
     this.webcam = false;
-    this.hand = false;
-    this.fullbody = false;
-    this.head = false
+    this.position = false;
+    this.gyroscope = false;
+    this.yawpitchroll = false;
+    this.orientation = false;
   }
 }
 

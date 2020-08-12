@@ -13,7 +13,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-#dashboard {
+#homepage {
   height: calc(100vh - 65px);
 }
 
@@ -56,9 +56,14 @@ code {
   overflow: auto;
 }
 
-.sidePanelElem {
+.canvasPanelElem {
   padding-left: 30px;
   padding-bottom: 20px;
+  padding-right: 30px;
+}
+
+.myoPanelElem {
+  padding-left: 30px;
   padding-right: 30px;
 }
 
@@ -72,6 +77,10 @@ code {
   padding-bottom: 12px;
 }
 
-.fixRowMargin {
+.fixInputMargin {
   height: 15px !important;
+}
+
+.fixRowMargin {
+  margin-bottom: 0px !important;
 }

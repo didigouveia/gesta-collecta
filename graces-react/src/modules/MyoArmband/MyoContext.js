@@ -15,11 +15,10 @@ class MyoContextProvider extends Component {
     orientStrokes: [],
     gyrosStrokes: [],
     accelStrokes: [],
-    setName: "",
     sampleName: "",
     subjectID: "",
     prevSampleName: "",
-    tryNb: 0
+    attemptNb: 0
   }
 
   pushToCurrStrokes = (data, timestamp) => {
@@ -46,48 +45,108 @@ class MyoContextProvider extends Component {
     this.state.orientStrokes.push(this.state.currOrientStroke);
     this.state.gyrosStrokes.push(this.state.currGyrosStroke);
     this.state.accelStrokes.push(this.state.currAccelStroke);
+
+    this.setState({
+      currOrientStroke: [],
+      currGyrosStroke: [],
+      currAccelStroke: []
+    })
+
     if (this.state.orientStrokes.length > 0) {
-      const downloadButton = document.getElementById("MyoDownloadButton");
-      downloadButton.classList.remove("disabled");
+      const downloadButtons = document.getElementsByClassName("MyoDownloadButton");
+      for (let i = 0; i < downloadButtons.length; i++) {
+        downloadButtons[i].classList.remove("disabled");
+      }
     }
     // console.log(this.state.orientStrokes);
   }
 
-  setSetName = (setName) => {
-    this.setState({ setName: setName });
-  }
-
   setSampleName = (sampleName) => {
     this.setState({ sampleName: sampleName });
+    this.setState({ attemptNb: 0 });
   }
 
   setSubjectID = (subjectID) => {
-    this.setState({ subjectID: subjectID });
+    this.setState({ subjectID: parseInt(subjectID) });
+    this.setState({ attemptNb: 0 });
   }
 
-  handleDownload = (e) => {
-    e.preventDefault();
+  setAttemptNb = (attemptNb) => {
+    this.setState({ attemptNb: parseInt(attemptNb) });
+  }
+
+  undoStroke = () => {
+    this.state.orientStrokes.pop();
+    this.state.gyrosStrokes.pop();
+    this.state.accelStrokes.pop();
+
+    if (this.state.orientStrokes.length === 0) {
+      const downloadButtons = document.getElementsByClassName("MyoDownloadButton");
+      for (let i = 0; i < downloadButtons.length; i++) {
+        downloadButtons[i].classList.add("disabled");
+      }
+    }
+  }
+
+  clearGesture = () => {
+    this.setState({
+      currOrientStroke: [],
+      currGyrosStroke: [],
+      currAccelStroke: [],
+      orientStrokes: [],
+      gyrosStrokes: [],
+      accelStrokes: []
+    })
+    const downloadButtons = document.getElementsByClassName("MyoDownloadButton");
+    for (let i = 0; i < downloadButtons.length; i++) {
+      downloadButtons[i].classList.add("disabled");
+    }
+  }
+
+  handleDownload = () => {
     const {
-      setName, sampleName, subjectID,
+      sampleName, subjectID, attemptNb,
       orientStrokes, gyrosStrokes, accelStrokes
-    } = this.state;
-    const dateNow = (new Date()).toLocaleString('en-GB');
-    const [orientDevice, gyrosDevice, accelDevice] = createDevices();
+    } = { ...this.state };
 
-    const orientGestSample = new GestureSample(
-      sampleName, parseInt(subjectID), dateNow, orientStrokes, orientDevice
-    );
-    const gyrosGestSample = new GestureSample(
-      sampleName, parseInt(subjectID), dateNow, gyrosStrokes, gyrosDevice
-    );
-    const accelGestSample = new GestureSample(
-      sampleName, parseInt(subjectID), dateNow, accelStrokes, accelDevice
-    );
+    const [orientGestSample, gyrosGestSample, accelGestSample] =
+      createGestSamples(sampleName, parseInt(subjectID),
+        orientStrokes, gyrosStrokes, accelStrokes);
 
-    console.log(orientGestSample);
+    downloadGestSamples(orientGestSample, gyrosGestSample, accelGestSample,
+      sampleName, parseInt(subjectID), attemptNb);
 
-    downloadGestSamples(orientGestSample, gyrosGestSample, accelGestSample, sampleName);
+    this.setState({
+      attemptNb: this.state.attemptNb + 1
+    })
+  }
 
+  handleSubmit = () => {
+    const {
+      sampleName, subjectID, attemptNb,
+      orientStrokes, gyrosStrokes, accelStrokes
+    } = { ...this.state };
+
+    const [orientGestSample, gyrosGestSample, accelGestSample] =
+      createGestSamples(sampleName, parseInt(subjectID),
+        orientStrokes, gyrosStrokes, accelStrokes);
+
+    submitGestSamples(orientGestSample, gyrosGestSample, accelGestSample,
+      sampleName, parseInt(subjectID), attemptNb);
+
+    this.setState({
+      attemptNb: this.state.attemptNb + 1
+    })
+  }
+
+  handleForm = (e) => {
+    e.preventDefault();
+    const action = document.activeElement.name;
+    if (action === "submit") {
+      this.handleSubmit();
+    } else if (action === "download") {
+      this.handleDownload();
+    }
   }
 
   render() {
@@ -100,7 +159,10 @@ class MyoContextProvider extends Component {
           setSetName: this.setSetName,
           setSampleName: this.setSampleName,
           setSubjectID: this.setSubjectID,
-          handleDownload: this.handleDownload
+          undoStroke: this.undoStroke,
+          clearGesture: this.clearGesture,
+          setAttemptNb: this.setAttemptNb,
+          handleForm: this.handleForm
         }}>
         {this.props.children}
       </MyoContext.Provider>
@@ -108,28 +170,93 @@ class MyoContextProvider extends Component {
   }
 }
 
+function createGestSamples(sampleName, subjectID,
+  orientStrokes, gyrosStrokes, accelStrokes) {
+
+  const dateNow = (new Date()).toLocaleString('en-GB');
+  const [orientDevice, gyrosDevice, accelDevice] = createDevices();
+
+  const orientGestSample = new GestureSample(
+    sampleName, subjectID, dateNow, orientStrokes, orientDevice
+  );
+  const gyrosGestSample = new GestureSample(
+    sampleName, subjectID, dateNow, gyrosStrokes, gyrosDevice
+  );
+  const accelGestSample = new GestureSample(
+    sampleName, subjectID, dateNow, accelStrokes, accelDevice
+  );
+
+  return [orientGestSample, gyrosGestSample, accelGestSample];
+}
+
 function createDevices() {
+  const resolutionHeight = window.screen.height;
+  const resolutionWidth = window.screen.width;
+  const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+  const pixelRatio = window.devicePixelRatio;
+
   const orientDevice = new Device(navigator.appVersion);
   orientDevice.orientation = true;
+  orientDevice.resolutionHeight = resolutionHeight;
+  orientDevice.resolutionWidth = resolutionWidth;
+  orientDevice.windowHeight = windowHeight;
+  orientDevice.windowWidth = windowWidth;
+  orientDevice.pixelRatio = pixelRatio;
+
   const gyrosDevice = new Device(navigator.appVersion);
   gyrosDevice.gyroscope = true;
+  gyrosDevice.resolutionHeight = resolutionHeight;
+  gyrosDevice.resolutionWidth = resolutionWidth;
+  gyrosDevice.windowHeight = windowHeight;
+  gyrosDevice.windowWidth = windowWidth;
+  gyrosDevice.pixelRatio = pixelRatio;
+
   const accelDevice = new Device(navigator.appVersion);
   accelDevice.acceleration = true;
+  accelDevice.resolutionHeight = resolutionHeight;
+  accelDevice.resolutionWidth = resolutionWidth;
+  accelDevice.windowHeight = windowHeight;
+  accelDevice.windowWidth = windowWidth;
+  accelDevice.pixelRatio = pixelRatio;
   return [orientDevice, gyrosDevice, accelDevice];
 }
 
-function downloadGestSamples(orientGestSample, gyrosGestSample, accelGestSample, sampleName) {
+function downloadGestSamples(orientGestSample, gyrosGestSample, accelGestSample, sampleName, subjectID, attemptNb) {
   const zip = new JSZip();
-
-  const sampleFolderZip = zip.folder(`${sampleName}_0`);
-  sampleFolderZip.file(`${sampleName}-orientation-0.json`, JSON.stringify(orientGestSample, null, 2));
-  sampleFolderZip.file(`${sampleName}-gyroscope-0.json`, JSON.stringify(gyrosGestSample, null, 2));
-  sampleFolderZip.file(`${sampleName}-acceleration-0.json`, JSON.stringify(accelGestSample, null, 2));
+  const attNbString = attemptNb.toString().padStart(2, '0');
+  const subjIDString = subjectID.toString().padStart(2, '0');
+  const sampleFolderZip = zip.folder(`${sampleName}-${attNbString}`);
+  sampleFolderZip.file(`${sampleName}-orientation-${attNbString}.json`, JSON.stringify(orientGestSample, null, 2));
+  sampleFolderZip.file(`${sampleName}-gyroscope-${attNbString}.json`, JSON.stringify(gyrosGestSample, null, 2));
+  sampleFolderZip.file(`${sampleName}-acceleration-${attNbString}.json`, JSON.stringify(accelGestSample, null, 2));
 
   zip.generateAsync({ type: "blob" })
     .then(function (blob) {
-      saveAs(blob, `${sampleName}_0`);
+      saveAs(blob, `MyoArmband-${subjIDString}-${sampleName}-${attNbString}`);
     });
+}
+
+function submitGestSamples(orientGestSample, gyrosGestSample, accelGestSample, sampleName, subjectID, attemptNb) {
+  // localStorage.removeItem('MyoGestureSet');
+  let myoGestureSet = sessionStorage.getItem('MyoGestureSet');
+  if (myoGestureSet === null) {
+    myoGestureSet = [];
+  } else {
+    myoGestureSet = JSON.parse(myoGestureSet);
+  }
+
+  const gestureSample = {
+    "sampleName": sampleName,
+    "subjectID": subjectID,
+    "attemptNb": attemptNb,
+    "orientGestSample": orientGestSample,
+    "gyrosGestSample": gyrosGestSample,
+    "accelGestSample": accelGestSample
+  }
+  myoGestureSet.push(gestureSample);
+
+  sessionStorage.setItem('MyoGestureSet', JSON.stringify(myoGestureSet));
 }
 
 export default MyoContextProvider;

@@ -1,17 +1,19 @@
 import React, { Component, createContext } from 'react'
 import Point from '../../utils/gestureFormat_v1/Point'
-// import Device from '../utils/gestureFormat_v1/Device'
-// import GestureSample from '../utils/gestureFormat_v1/GestureSample'
+import Device from '../../utils/gestureFormat_v1/Device'
+import GestureSample from '../../utils/gestureFormat_v1/GestureSample'
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 export const CanvasContext = createContext()
 
 class CanvasContextProvider extends Component {
   state = {
-    loadTimeOffset: 3,
+    loadTimeOffset: 5,
     backgroundColor: 'white', // #FFF
     lazyRadius: 1,
     brushRadius: 5,
-    brushColor: "green", // #444
+    brushColor: "black", // #444
     catenaryColor: "#0a0302", // #0a0302
     // gridColor: "red", // rgba(150,150,150,0.17)
     // hideGrid: false,
@@ -29,7 +31,12 @@ class CanvasContextProvider extends Component {
     savedStrokes: null,
     currStroke: [],
     stroke_id: 0,
-    pointerDown: false
+    pointerDown: false,
+    sampleName: "",
+    subjectID: "",
+    prevSampleName: "",
+    attemptNb: 0,
+    deviceName: ""
   }
 
   getRef = (canvasDraw) => {
@@ -168,10 +175,66 @@ class CanvasContextProvider extends Component {
     }
     this.setState({ pointerDown: false })
   }
-  downloadGesture = () => {
-    console.log(this.state.savedStrokes)
-    //TODO
 
+  setSampleName = (sampleName) => {
+    this.setState({ sampleName: sampleName });
+    this.setState({ attemptNb: 0 });
+  }
+
+  setSubjectID = (subjectID) => {
+    this.setState({ subjectID: parseInt(subjectID) });
+    this.setState({ attemptNb: 0 });
+  }
+
+  setAttemptNb = (attemptNb) => {
+    this.setState({ attemptNb: parseInt(attemptNb) });
+  }
+
+  setDeviceName = (deviceName) => {
+    this.setState({ deviceName: deviceName });
+    this.setState({ attemptNb: 0 });
+  }
+
+  handleForm = (e) => {
+    e.preventDefault();
+    const action = document.activeElement.name;
+    if (action === "submit") {
+      this.handleSubmit();
+    } else if (action === "download") {
+      this.handleDownload();
+    }
+  }
+
+  handleDownload = () => {
+    const {
+      sampleName, subjectID, attemptNb,
+      savedStrokes, deviceName, canvasWidth,
+      canvasHeight
+    } = { ...this.state };
+
+    const gestSample = createGestSample(sampleName, parseInt(subjectID), savedStrokes,
+      canvasWidth, canvasHeight);
+
+    downloadGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
+
+    this.setState({
+      attemptNb: this.state.attemptNb + 1
+    })
+  }
+
+  handleSubmit = () => {
+    const {
+      sampleName, subjectID, attemptNb,
+      savedStrokes, deviceName
+    } = { ...this.state };
+
+    const gestSample = createGestSample(sampleName, parseInt(subjectID), savedStrokes);
+
+    submitGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
+
+    this.setState({
+      attemptNb: this.state.attemptNb + 1
+    })
   }
 
   render() {
@@ -200,13 +263,80 @@ class CanvasContextProvider extends Component {
           onPointerUp: this.onPointerUp,
           onPointerLeave: this.onPointerLeave,
           clearGesture: this.clearGesture,
-          downloadGesture: this.downloadGesture,
+          handleForm: this.handleForm,
+          setSampleName: this.setSampleName,
+          setSubjectID: this.setSubjectID,
+          setAttemptNb: this.setAttemptNb,
+          setDeviceName: this.setDeviceName
         }}
       >
         {this.props.children}
       </CanvasContext.Provider>
     )
   }
+}
+
+
+function createGestSample(sampleName, subjectID, strokes, canvasWidth, canvasHeight) {
+  const dateNow = (new Date()).toLocaleString('en-GB');
+  const mode = document.getElementById("mode").value;
+  const device = createDevice(mode, canvasWidth, canvasHeight);
+
+  const gestSample = new GestureSample(
+    sampleName, subjectID, dateNow, strokes, device
+  );
+
+  return gestSample;
+}
+
+function createDevice(mode, canvasWidth, canvasHeight) {
+  const resolutionHeight = window.screen.height;
+  const resolutionWidth = window.screen.width;
+  const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+  const pixelRatio = window.devicePixelRatio;
+
+  const device = new Device(navigator.appVersion);
+  device[mode] = true;
+  device.resolutionHeight = resolutionHeight;
+  device.resolutionWidth = resolutionWidth;
+  device.windowHeight = canvasHeight;
+  device.windowWidth = canvasWidth;
+  device.pixelRatio = pixelRatio;
+
+  return device;
+}
+
+function downloadGestSample(gestSample, sampleName, subjectID, attemptNb, deviceName) {
+  const zip = new JSZip();
+  const attNbString = attemptNb.toString().padStart(2, '0');
+  const subjIDString = subjectID.toString().padStart(2, '0');
+  zip.file(`${sampleName}-${attNbString}.json`, JSON.stringify(gestSample, null, 2));
+
+  zip.generateAsync({ type: "blob" })
+    .then(function (blob) {
+      saveAs(blob, `${deviceName}-${subjIDString}-${sampleName}-${attNbString}`);
+    });
+}
+
+function submitGestSample(gestSample, sampleName, subjectID, attemptNb, deviceName) {
+  let drawGestureSet = sessionStorage.getItem('DrawGestureSet');
+  if (drawGestureSet === null) {
+    drawGestureSet = [];
+  } else {
+    drawGestureSet = JSON.parse(drawGestureSet);
+  }
+
+  const gestureSample = {
+    "deviceName": deviceName,
+    "sampleName": sampleName,
+    "subjectID": subjectID,
+    "attemptNb": attemptNb,
+    "gestSample": gestSample
+  }
+  drawGestureSet.push(gestureSample);
+
+  sessionStorage.setItem('DrawGestureSet', JSON.stringify(drawGestureSet));
 }
 
 export default CanvasContextProvider

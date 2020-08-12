@@ -197,15 +197,6 @@ class CanvasContextProvider extends Component {
 
   handleForm = (e) => {
     e.preventDefault();
-    const action = document.activeElement.name;
-    if (action === "submit") {
-      this.handleSubmit();
-    } else if (action === "download") {
-      this.handleDownload();
-    }
-  }
-
-  handleDownload = () => {
     const {
       sampleName, subjectID, attemptNb,
       savedStrokes, deviceName, canvasWidth,
@@ -215,22 +206,12 @@ class CanvasContextProvider extends Component {
     const gestSample = createGestSample(sampleName, parseInt(subjectID), savedStrokes,
       canvasWidth, canvasHeight);
 
-    downloadGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
-
-    this.setState({
-      attemptNb: this.state.attemptNb + 1
-    })
-  }
-
-  handleSubmit = () => {
-    const {
-      sampleName, subjectID, attemptNb,
-      savedStrokes, deviceName
-    } = { ...this.state };
-
-    const gestSample = createGestSample(sampleName, parseInt(subjectID), savedStrokes);
-
-    submitGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
+    const action = document.activeElement.name;
+    if (action === "submit") {
+      submitGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
+    } else if (action === "download") {
+      downloadGestSample(gestSample, sampleName, parseInt(subjectID), attemptNb, deviceName);
+    }
 
     this.setState({
       attemptNb: this.state.attemptNb + 1
